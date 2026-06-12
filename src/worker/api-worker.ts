@@ -8,6 +8,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { CONFIG } from './config';
 import { apiRoutes } from './routes/api';
+import { sourceRoutes } from './routes/sources';
 
 // Define the Worker environment type
 export type Env = {
@@ -24,6 +25,8 @@ app.use('*', cors(CONFIG.CORS)); // CORS middleware
 
 // Mount API routes
 app.route('/api', apiRoutes);
+// Generic data-source gateway (catalog + invoke); see routes/sources.ts
+app.route('/api/sources', sourceRoutes);
 
 // Health-check endpoint
 app.get('/health', (c) => {

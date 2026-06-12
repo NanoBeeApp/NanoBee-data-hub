@@ -1,7 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "init-hono-tanstack-rpc",
-	"main": "@tanstack/react-start/server-entry",
+	"main": "src/server.ts",
 	"compatibility_date": "2025-01-01",
 	"compatibility_flags": [
 		"nodejs_compat"
