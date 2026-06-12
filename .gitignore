@@ -122,8 +122,8 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variable files (仅忽略 .local 后缀的本地覆盖文件)
-# .env / .env.prod / .env.dev 必须纳入 git 管理
+# dotenv environment variable files (only ignore .local suffix overrides)
+# .env / .env.prod / .env.dev must be tracked by git
 .env.development.local
 .env.test.local
 .env.production.local

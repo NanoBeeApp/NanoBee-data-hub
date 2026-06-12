@@ -1,27 +1,27 @@
-# OAuth 回调路由
+# OAuth Callback Route
 
-## 需求
-- 将前端 OAuth 回调路由从 `/oauth/demo/callback` 调整为 `/oauth/callback`。
-- 保持授权码换取 token 的核心流程不变。
-- 确保本地环境示例配置中的回调地址与新路由一致。
+## Requirements
+- Change the frontend OAuth callback route from `/oauth/demo/callback` to `/oauth/callback`.
+- Keep the core authorization-code-for-token exchange flow unchanged.
+- Ensure the callback URL in the local example configuration matches the new route.
 
-## 实现细节
-- 路由文件改名：`oauth.demo.callback.tsx` -> `oauth.callback.tsx`。
-- 更新 `createFileRoute` 路径为 `/oauth/callback`。
-- 更新默认 `redirectUri` 回退值为 `${window.location.origin}/oauth/callback`。
-- 同步更新 `.env.example` 中 `VITE_AUTH_REDIRECT_URI` 与 `AUTH_REDIRECT_URI`。
+## Implementation Details
+- Renamed the route file: `oauth.demo.callback.tsx` -> `oauth.callback.tsx`.
+- Updated the `createFileRoute` path to `/oauth/callback`.
+- Updated the default `redirectUri` fallback value to `${window.location.origin}/oauth/callback`.
+- Synchronised `VITE_AUTH_REDIRECT_URI` and `AUTH_REDIRECT_URI` in `.env.example`.
 
-## 功能验证计划
-1. 启动开发服务器，确认项目能正常编译启动。
-2. 访问 `/oauth/callback?code=test`，确认会进入回调处理逻辑并跳转回首页。
-3. 直接访问旧地址 `/oauth/demo/callback`，确认不再匹配旧回调页面。
-4. 检查 `.env.example`，确认回调地址已更新为新路径。
+## Verification Plan
+1. Start the development server and confirm the project compiles and starts normally.
+2. Visit `/oauth/callback?code=test` and confirm the callback handling logic is triggered and redirects back to the home page.
+3. Visit the old address `/oauth/demo/callback` directly and confirm it no longer matches any callback page.
+4. Check `.env.example` and confirm the callback URL has been updated to the new path.
 
-## 验证结果
-- 已启动开发服务器（`npm run dev -- --host 127.0.0.1 --port 5173`），项目正常启动。
-- 使用 Playwright 无头模式访问 `http://127.0.0.1:5173/oauth/callback?code=test`，最终路径为 `/`，说明新回调路由已生效并触发回调逻辑。
-- 使用 Playwright 无头模式访问 `http://127.0.0.1:5173/oauth/demo/callback`，页面文本为 `Not Found`，说明旧回调路由已失效。
-- 通过命令检查 `.env.example`，确认以下两项均为新路径：
+## Verification Results
+- Development server started (`npm run dev -- --host 127.0.0.1 --port 5173`); project starts normally.
+- Playwright headless visit to `http://127.0.0.1:5173/oauth/callback?code=test` ended at path `/`, confirming the new callback route is active and the callback logic fires.
+- Playwright headless visit to `http://127.0.0.1:5173/oauth/demo/callback` showed page text `Not Found`, confirming the old callback route is no longer active.
+- Checked `.env.example` via command; both entries are now on the new path:
   - `VITE_AUTH_REDIRECT_URI=http://localhost:5173/oauth/callback`
   - `AUTH_REDIRECT_URI=http://localhost:5173/oauth/callback`
-- 执行 `npm run build` 构建通过，产物中已生成 `oauth.callback` 对应构建文件。
+- `npm run build` passed; the build output contains the `oauth.callback` build artifact.

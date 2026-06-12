@@ -1,76 +1,76 @@
-# API 客户端
+# API Client
 
-## 需求
+## Requirements
 
-- 创建类型安全的 Hono RPC 客户端
-- 自动获取正确的 API 基础 URL（开发/生产环境）
-- 提供简洁的 API 调用方式
-- 完整的 TypeScript 类型推导
+- Create a type-safe Hono RPC client
+- Automatically resolve the correct API base URL (development / production)
+- Provide a clean and concise API call interface
+- Full TypeScript type inference throughout
 
-## 实现细节
+## Implementation Details
 
-### 核心功能
-- 使用 `hono/client` 的 `hc` 函数创建客户端
-- 导入后端的 `AppType` 类型实现类型安全
-- 自动适配当前域名作为 API 基础 URL
+### Core Features
+- Uses the `hc` function from `hono/client` to create the client
+- Imports the backend `AppType` to achieve end-to-end type safety
+- Automatically uses the current domain as the API base URL
 
-### 使用方式
+### Usage
 
-#### GET 请求
+#### GET Requests
 ```typescript
 import { apiClient } from '@/lib/api-client';
 
-// 带查询参数
+// With query parameters
 const result = await apiClient.api.hello.$get({
-  query: { name: '张三' }
+  query: { name: 'John' }
 });
 const data = await result.json();
 
-// 无参数
+// Without parameters
 const result = await apiClient.api.users.$get();
 const data = await result.json();
 ```
 
-#### POST 请求
+#### POST Requests
 ```typescript
-// 带 JSON body
+// With JSON body
 const result = await apiClient.api.hello.$post({
-  json: { name: '张三' }
+  json: { name: 'John' }
 });
 const data = await result.json();
 
-// 创建用户
+// Create a user
 const result = await apiClient.api.users.$post({
   json: {
-    name: '李四',
-    email: 'lisi@example.com'
+    name: 'Jane',
+    email: 'jane@example.com'
   }
 });
 const newUser = await result.json();
 ```
 
-### 类型安全
-所有的请求参数和响应数据都有完整的类型推导：
-- 请求参数类型检查
-- 响应数据类型推导
-- 编译时错误检测
+### Type Safety
+All request parameters and response data have full type inference:
+- Request parameter type checking
+- Response data type inference
+- Compile-time error detection
 
-## 功能验证
+## Verification
 
-### 验证计划
-1. 在 React 组件中导入并使用客户端
-2. 测试各种 API 调用
-3. 验证类型安全性
-4. 检查错误处理
+### Verification Plan
+1. Import and use the client inside a React component
+2. Test various API calls
+3. Verify type safety
+4. Check error handling
 
-### 验证方法
-在浏览器控制台查看：
-- 请求是否成功发送
-- 响应数据格式是否正确
-- TypeScript 类型提示是否准确
-- 错误情况的处理
+### Verification Method
+Inspect the following in the browser console:
+- Whether requests are sent successfully
+- Whether the response data format is correct
+- Whether TypeScript type hints are accurate
+- How errors are handled
 
-## 当前状态
-✅ 已完成客户端创建
-⏳ 待在组件中使用
-⏳ 待添加错误处理
+## Current Status
+✅ Client creation complete
+⏳ Pending: usage inside components
+⏳ Pending: error handling

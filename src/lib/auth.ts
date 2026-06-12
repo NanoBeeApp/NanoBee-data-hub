@@ -54,7 +54,7 @@ function parseCookieHeader(cookieHeader: string): Record<string, string> {
   );
 }
 
-// 仅用于 demo 中读取 payload，不做签名校验。
+// Used only in the demo to read the JWT payload — no signature verification.
 function decodeJwt(token: string): Record<string, unknown> | null {
   try {
     const base64Url = token.split(".")[1];

@@ -1,13 +1,13 @@
 /**
- * Worker 配置文件
- * 统一管理所有常量和配置
+ * Worker configuration
+ * Central management of all constants and settings
  */
 
 export const CONFIG = {
-  // API 路由前缀
+  // API route prefix
   API_PREFIX: '/api',
 
-  // CORS 配置
+  // CORS settings
   CORS: {
     origin: '*',
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

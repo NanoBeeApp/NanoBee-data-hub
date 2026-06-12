@@ -1,6 +1,6 @@
 /**
- * Zustand Store 示例
- * 简单的计数器状态管理
+ * Zustand store example
+ * Simple counter state management
  */
 import { create } from "zustand";
 

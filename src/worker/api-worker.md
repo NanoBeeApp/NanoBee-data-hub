@@ -1,63 +1,63 @@
 # Hono API Worker
 
-## 需求
+## Requirements
 
-- 创建基于 Hono 的 API Worker，处理所有后端接口请求
-- 支持 RPC 模式，提供类型安全的前后端通信
-- 集成常用中间件（CORS、日志等）
-- 统一的错误处理和响应格式
+- Create a Hono-based API Worker to handle all backend API requests
+- Support RPC mode for type-safe frontend–backend communication
+- Integrate common middleware (CORS, logging, etc.)
+- Unified error handling and response format
 
-## 实现细节
+## Implementation Details
 
-### 文件结构
+### File Structure
 ```
 src/worker/
-├── api-worker.ts      # Worker 主入口
-├── config.ts          # 配置文件
+├── api-worker.ts      # Worker entry point
+├── config.ts          # Configuration file
 └── routes/
-    └── api.ts         # API 路由定义
+    └── api.ts         # API route definitions
 ```
 
-### 技术栈
-- **Hono**: 轻量级 Web 框架
-- **@hono/zod-validator**: Zod 验证器中间件
-- **zod**: 数据验证库
+### Tech Stack
+- **Hono**: lightweight web framework
+- **@hono/zod-validator**: Zod validator middleware
+- **zod**: data validation library
 
-### 中间件
-1. **logger**: 请求日志中间件
-2. **cors**: CORS 跨域配置
-3. **zValidator**: 请求数据验证
+### Middleware
+1. **logger**: request logging middleware
+2. **cors**: CORS cross-origin configuration
+3. **zValidator**: request data validation
 
-### 导出类型
-导出 `AppType` 类型供前端 RPC 客户端使用，实现端到端类型安全。
+### Exported Types
+Exports the `AppType` type for use by the frontend RPC client, enabling end-to-end type safety.
 
-## 功能验证
+## Verification
 
-### 验证计划
-1. 启动开发服务器
-2. 测试 `/health` 健康检查接口
-3. 测试 `/api/hello` GET 接口
-4. 测试 `/api/hello` POST 接口
-5. 测试 `/api/users` GET 和 POST 接口
-6. 验证前端 RPC 客户端调用
+### Verification Plan
+1. Start the development server
+2. Test the `/health` health-check endpoint
+3. Test the `/api/hello` GET endpoint
+4. Test the `/api/hello` POST endpoint
+5. Test the `/api/users` GET and POST endpoints
+6. Verify frontend RPC client calls
 
-### 验证步骤
+### Verification Steps
 ```bash
-# 1. 启动开发服务器
+# 1. Start the development server
 pnpm dev
 
-# 2. 测试健康检查（使用 curl 或浏览器）
+# 2. Test the health check (using curl or a browser)
 curl http://localhost:5173/health
 
-# 3. 测试 API 接口
-curl "http://localhost:5173/api/hello?name=张三"
-curl -X POST http://localhost:5173/api/hello -H "Content-Type: application/json" -d '{"name":"张三"}'
+# 3. Test the API endpoints
+curl "http://localhost:5173/api/hello?name=John"
+curl -X POST http://localhost:5173/api/hello -H "Content-Type: application/json" -d '{"name":"John"}'
 
-# 4. 在前端页面测试 RPC 调用
-# 打开浏览器访问 http://localhost:5173 并查看控制台日志
+# 4. Test RPC calls from the frontend page
+# Open a browser at http://localhost:5173 and check the console logs
 ```
 
-## 当前状态
-✅ 已完成基础架构
-✅ 已实现示例接口
-⏳ 待集成到前端页面
+## Current Status
+✅ Base architecture complete
+✅ Example endpoints implemented
+⏳ Pending: integration into the frontend page

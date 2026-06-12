@@ -1,28 +1,29 @@
-# 根路由说明
+# Root Route
 
-## 需求背景
-- 在应用根路由加载阶段预取会话，保证首页等子路由可以直接从路由上下文读取用户登录态。
+## Background
 
-## 当前进度
-- 总进度：100%
-- 已完成：
-  - 在 `beforeLoad` 中调用 `getSession`。
-  - 将 `session` 注入根路由上下文，供子路由读取。
-- 待完成：
-  - 无
+- Pre-fetch the session during the root route's load phase so that child routes such as the home page can read the user's login state directly from the route context.
 
-## 实现细节
-1. 在 `createRootRoute` 中增加 `beforeLoad`。
-2. 通过 `getSession` 获取当前请求对应会话。
-3. 返回 `{ session }` 作为路由上下文。
+## Current Progress
+- Overall: 100%
+- Completed:
+  - Call `getSession` inside `beforeLoad`.
+  - Inject `session` into the root route context so child routes can access it.
+- Remaining:
+  - None
 
-## 功能验证计划
-1. 运行 `npm run build`，确认根路由与上下文类型可编译。
-2. 启动开发服务器后访问首页，确认页面可正常渲染。
-3. 结合 Playwright 无头验证 OAuth 回调地址访问后能够回到首页，说明根路由上下文与渲染链路正常。
+## Implementation Details
+1. Add `beforeLoad` to `createRootRoute`.
+2. Retrieve the session for the current request via `getSession`.
+3. Return `{ session }` as the route context.
 
-## 验证记录
-- 验证时间：2026-02-22
-- 结果：
-  - `npm run build` 通过。
-  - Playwright 无头验证通过，首页可正常展示。
+## Verification Plan
+1. Run `npm run build` to confirm the root route and its context types compile correctly.
+2. Start the development server and visit the home page to confirm the page renders normally.
+3. Use Playwright in headless mode to verify that visiting the OAuth callback URL redirects back to the home page, confirming that the root route context and rendering pipeline work correctly.
+
+## Verification Record
+- Verified: 2026-02-22
+- Results:
+  - `npm run build` passed.
+  - Playwright headless verification passed; the home page renders correctly.

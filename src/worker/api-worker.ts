@@ -1,6 +1,6 @@
 /**
  * Hono API Worker
- * 所有后端接口和业务逻辑的入口
+ * Entry point for all backend endpoints and business logic
  */
 
 import { Hono } from 'hono';
@@ -9,23 +9,23 @@ import { logger } from 'hono/logger';
 import { CONFIG } from './config';
 import { apiRoutes } from './routes/api';
 
-// 定义 Worker 环境类型
+// Define the Worker environment type
 export type Env = {
-  // 在这里添加 Cloudflare Workers 的 bindings
-  // 例如: MY_KV: KVNamespace;
+  // Add Cloudflare Workers bindings here
+  // e.g.: MY_KV: KVNamespace;
 };
 
-// 创建 Hono 应用实例
+// Create the Hono app instance
 const app = new Hono<{ Bindings: Env }>();
 
-// 添加中间件
-app.use('*', logger()); // 日志中间件
-app.use('*', cors(CONFIG.CORS)); // CORS 中间件
+// Register middleware
+app.use('*', logger()); // logging middleware
+app.use('*', cors(CONFIG.CORS)); // CORS middleware
 
-// 挂载 API 路由
+// Mount API routes
 app.route('/api', apiRoutes);
 
-// 健康检查接口
+// Health-check endpoint
 app.get('/health', (c) => {
   return c.json({
     ok: true,
@@ -33,7 +33,7 @@ app.get('/health', (c) => {
   });
 });
 
-// 导出类型供客户端使用
+// Export type for client usage
 export type AppType = typeof apiRoutes;
 
 export default app;

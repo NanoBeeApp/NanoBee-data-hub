@@ -1,57 +1,57 @@
 /**
- * Hono RPC 功能测试
+ * Hono RPC functional tests
  */
 
 import { test, expect } from '@playwright/test';
 
-test.describe('Hono RPC 测试', () => {
-  test('测试首页加载', async ({ page }) => {
+test.describe('Hono RPC tests', () => {
+  test('homepage loads', async ({ page }) => {
     await page.goto('http://localhost:5173');
     await page.waitForLoadState('networkidle');
 
-    // 检查页面标题
+    // Check page heading
     await expect(page.locator('h1')).toContainText('TanStack Start');
   });
 
-  test('测试 Hono RPC GET 请求', async ({ page }) => {
+  test('Hono RPC GET request', async ({ page }) => {
     await page.goto('http://localhost:5173');
     await page.waitForLoadState('networkidle');
 
-    // 找到 Hono RPC 示例区域
-    const rpcSection = page.locator('text=Hono RPC 示例').locator('..');
+    // Locate the Hono RPC demo section
+    const rpcSection = page.locator('text=Hono RPC Example').locator('..');
 
-    // 输入名字
-    await rpcSection.locator('input').fill('测试用户');
+    // Enter a name
+    await rpcSection.locator('input').fill('test user');
 
-    // 点击测试 GET 按钮
-    await rpcSection.locator('button:has-text("测试 GET")').click();
+    // Click the Test GET button
+    await rpcSection.locator('button:has-text("Test GET")').click();
 
-    // 等待响应
+    // Wait for response
     await page.waitForTimeout(2000);
 
-    // 检查是否有响应显示
+    // Check that a response is displayed
     // const resultText = await rpcSection.locator('text=Hello').textContent();
-    // console.log('GET 响应:', resultText);
+    // console.log('GET response:', resultText);
   });
 
-  test('测试 Hono RPC POST 请求', async ({ page }) => {
+  test('Hono RPC POST request', async ({ page }) => {
     await page.goto('http://localhost:5173');
     await page.waitForLoadState('networkidle');
 
-    // 找到 Hono RPC 示例区域
-    const rpcSection = page.locator('text=Hono RPC 示例').locator('..');
+    // Locate the Hono RPC demo section
+    const rpcSection = page.locator('text=Hono RPC Example').locator('..');
 
-    // 输入名字
-    await rpcSection.locator('input').fill('测试用户');
+    // Enter a name
+    await rpcSection.locator('input').fill('test user');
 
-    // 点击测试 POST 按钮
-    await rpcSection.locator('button:has-text("测试 POST")').click();
+    // Click the Test POST button
+    await rpcSection.locator('button:has-text("Test POST")').click();
 
-    // 等待响应
+    // Wait for response
     await page.waitForTimeout(2000);
 
-    // 检查是否有响应显示
-    // const resultText = await rpcSection.locator('text=你好').textContent();
-    // console.log('POST 响应:', resultText);
+    // Check that a response is displayed
+    // const resultText = await rpcSection.locator('text=Hello').textContent();
+    // console.log('POST response:', resultText);
   });
 });

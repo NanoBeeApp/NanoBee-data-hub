@@ -7,7 +7,7 @@ export default defineConfig({
   },
   server: {
     preset: "cloudflare-pages",
-    // 自定义服务器入口
+    // Custom server entry
     entry: "./src/server-entry.ts",
   },
 });

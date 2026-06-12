@@ -1,28 +1,28 @@
-# SSR 示例页面
+# SSR Example Page
 
-## 需求
-展示 TanStack Start 的 SSR（服务端渲染）核心功能，包括路由 loader 数据预取和客户端水合。
+## Requirements
+Demonstrate the core SSR (Server-Side Rendering) capabilities of TanStack Start, including route loader data pre-fetching and client-side hydration.
 
-## 实现细节
-- 使用路由 `loader` 在服务端预取数据（serverInfo + articles）
-- 通过 `Route.useLoaderData()` 在组件中获取预取数据
-- 对比服务端渲染时间和客户端水合时间，直观展示 SSR 效果
-- 提供 SSR 工作原理说明
+## Implementation Details
+- Uses a route `loader` to pre-fetch data on the server (serverInfo + articles)
+- Retrieves pre-fetched data inside components via `Route.useLoaderData()`
+- Compares the server render time with the client hydration time to visually demonstrate the SSR effect
+- Includes an explanation of how SSR works
 
-## 组件拆分
-- `SSRPage`: 主页面容器
-- `SSRPageHeader`: 页面标题
-- `ServerInfoCard`: 服务端信息展示
-- `InfoRow`: 信息行
-- `ArticleListCard`: 文章列表
-- `ArticleItem`: 单篇文章
-- `SSRExplanation`: SSR 原理说明
-- `BackToHomeLink`: 返回首页
+## Component Breakdown
+- `SSRPage`: main page container
+- `SSRPageHeader`: page title
+- `ServerInfoCard`: server information display
+- `InfoRow`: individual information row
+- `ArticleListCard`: article list
+- `ArticleItem`: single article entry
+- `SSRExplanation`: SSR principles explanation
+- `BackToHomeLink`: back-to-home navigation link
 
-## 功能验证步骤
-1. 访问 `/ssr` 页面，验证页面正常渲染
-2. 确认服务端信息和文章列表直接显示（无 loading 状态）
-3. 查看页面源代码，确认数据已嵌入 HTML
-4. 验证服务端时间和客户端水合时间有差异
-5. 点击"返回首页"按钮验证导航正常
-6. 从首页点击 SSR 示例链接验证导航正常
+## Verification Steps
+1. Visit the `/ssr` page and verify the page renders correctly
+2. Confirm that the server info and article list are displayed immediately (no loading state)
+3. View the page source and confirm that the data is embedded in the HTML
+4. Verify that the server render time and client hydration time differ
+5. Click the "Back to Home" button and verify navigation works
+6. Click the SSR example link from the home page and verify navigation works

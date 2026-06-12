@@ -1,40 +1,40 @@
 # Hono + Vite React Template
 
-全栈开发模板：Hono API + React + Cloudflare Workers
+Full-stack development template: Hono API + React + Cloudflare Workers
 
-## 技术栈
+## Tech Stack
 
-- **前端**: React 19 + Vite + Tailwind CSS v4 + shadcn/ui
-- **后端**: Hono (运行在 Cloudflare Workers)
-- **类型安全 RPC**: Hono Client
-- **部署**: Cloudflare Workers
+- **Frontend**: React 19 + Vite + Tailwind CSS v4 + shadcn/ui
+- **Backend**: Hono (running on Cloudflare Workers)
+- **Type-safe RPC**: Hono Client
+- **Deployment**: Cloudflare Workers
 
-## 快速开始
+## Quick Start
 
 ```bash
-# 安装依赖
+# Install dependencies
 pnpm install
 
-# 启动开发服务器
+# Start the development server
 pnpm dev
 
-# 访问 http://localhost:5173
+# Visit http://localhost:5173
 ```
 
-## 项目结构
+## Project Structure
 
 ```
 ├── src/
-│   ├── web/                     # 前端 React
+│   ├── web/                     # Frontend React
 │   │   ├── App.tsx
 │   │   ├── main.tsx
 │   │   ├── index.css
-│   │   ├── components/ui/       # shadcn 组件
+│   │   ├── components/ui/       # shadcn components
 │   │   ├── lib/
-│   │   │   ├── rpcClient.ts     # Hono RPC 客户端
+│   │   │   ├── rpcClient.ts     # Hono RPC client
 │   │   │   └── utils.ts
 │   │   └── pages/Home.tsx
-│   └── worker/                  # 后端 Hono API
+│   └── worker/                  # Backend Hono API
 │       └── index.ts
 ├── public/
 ├── index.html
@@ -44,37 +44,37 @@ pnpm dev
 └── package.json
 ```
 
-## 常用命令
+## Common Commands
 
 ```bash
-# 开发
-pnpm dev              # 启动开发服务器
+# Development
+pnpm dev              # Start the development server
 
-# 构建
-pnpm build            # 构建项目
-pnpm preview          # 预览构建结果
+# Build
+pnpm build            # Build the project
+pnpm preview          # Preview the build output
 
-# 部署
-pnpm deploy           # 部署到 Cloudflare Workers
+# Deployment
+pnpm deploy           # Deploy to Cloudflare Workers
 
-# 代码质量
-pnpm lint             # ESLint 检查
-pnpm test             # 运行测试
+# Code quality
+pnpm lint             # ESLint check
+pnpm test             # Run tests
 ```
 
-## API 示例
+## API Examples
 
-后端 API 位于 `src/worker/index.ts`：
+The backend API lives in `src/worker/index.ts`:
 
 ```typescript
-// 健康检查
+// Health check
 GET /api/health
 
 // Hello API
 GET /api/hello?name=World
 ```
 
-前端使用类型安全的 RPC 客户端调用：
+The frontend calls it via the type-safe RPC client:
 
 ```typescript
 import { rpcClient } from "@/lib/rpcClient";
@@ -83,9 +83,9 @@ const res = await rpcClient.api.hello.$get({ query: { name: "Template" } });
 const data = await res.json();
 ```
 
-## 添加 Cloudflare 绑定
+## Adding Cloudflare Bindings
 
-如需使用 D1、KV、R2 等服务，在 `wrangler.json` 中添加绑定配置：
+To use D1, KV, R2, or other services, add binding configuration in `wrangler.json`:
 
 ```json
 {
@@ -105,7 +105,7 @@ const data = await res.json();
 }
 ```
 
-然后在 `src/worker/index.ts` 中更新 Env 类型：
+Then update the `Env` type in `src/worker/index.ts`:
 
 ```typescript
 type Env = {
@@ -114,7 +114,7 @@ type Env = {
 };
 ```
 
-## 添加 shadcn 组件
+## Adding shadcn Components
 
 ```bash
 pnpm dlx shadcn@latest add button

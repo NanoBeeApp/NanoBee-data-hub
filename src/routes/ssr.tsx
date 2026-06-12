@@ -3,10 +3,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { getServerInfo, getArticles } from "@/server/ssr-functions";
 
-// 路由定义：使用 loader 在服务端预取数据
+// Route definition: use loader to prefetch data on the server
 export const Route = createFileRoute("/ssr")({
   loader: async () => {
-    // loader 在服务端执行，数据会嵌入到初始 HTML 中
+    // loader runs on the server; data is embedded in the initial HTML
     const [serverInfo, articlesData] = await Promise.all([
       getServerInfo(),
       getArticles(),
@@ -21,9 +21,9 @@ function SSRPage() {
   const [clientTime, setClientTime] = React.useState<string>("");
   const [hydrated, setHydrated] = React.useState(false);
 
-  // 客户端水合后记录时间，用于对比 SSR 时间
+  // Record time after client hydration to compare with the SSR timestamp
   React.useEffect(() => {
-    setClientTime(new Date().toLocaleString("zh-CN"));
+    setClientTime(new Date().toLocaleString("en-US"));
     setHydrated(true);
   }, []);
 
@@ -47,19 +47,19 @@ function SSRPage() {
   );
 }
 
-// 页面标题
+// Page header
 function SSRPageHeader() {
   return (
     <div className="text-center space-y-2">
-      <h1 className="text-3xl font-bold text-foreground">SSR 示例页面</h1>
+      <h1 className="text-3xl font-bold text-foreground">SSR Example Page</h1>
       <p className="text-muted-foreground">
-        此页面的数据在服务端渲染时预取，无需客户端加载
+        This page&apos;s data is prefetched during server-side rendering — no client-side loading required
       </p>
     </div>
   );
 }
 
-// 服务端信息卡片
+// Server info card
 function ServerInfoCard({
   serverInfo,
   clientTime,
@@ -76,29 +76,29 @@ function ServerInfoCard({
 }) {
   return (
     <div className="space-y-4 p-6 border rounded-lg">
-      <h2 className="text-lg font-semibold">服务端信息</h2>
+      <h2 className="text-lg font-semibold">Server Info</h2>
       <p className="text-sm text-muted-foreground">
-        以下数据在服务端渲染时获取，直接嵌入到 HTML 中
+        The following data was fetched during server-side rendering and embedded directly in the HTML
       </p>
       <div className="space-y-2 text-sm">
-        <InfoRow label="渲染类型" value={serverInfo.renderType} />
-        <InfoRow label="运行环境" value={serverInfo.runtime} />
-        <InfoRow label="服务端渲染时间" value={serverInfo.serverTimeFormatted} />
+        <InfoRow label="Render type" value={serverInfo.renderType} />
+        <InfoRow label="Runtime" value={serverInfo.runtime} />
+        <InfoRow label="Server render time" value={serverInfo.serverTimeFormatted} />
         <InfoRow
-          label="客户端水合时间"
-          value={hydrated ? clientTime : "水合中..."}
+          label="Client hydration time"
+          value={hydrated ? clientTime : "Hydrating..."}
         />
       </div>
       {hydrated && (
         <p className="text-xs text-muted-foreground bg-muted p-2 rounded">
-          提示：服务端时间和客户端时间的差异说明页面是在服务端预渲染的
+          Tip: the difference between the server time and the client time confirms the page was pre-rendered on the server
         </p>
       )}
     </div>
   );
 }
 
-// 信息行组件
+// Info row component
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between items-center py-1 border-b border-dashed">
@@ -108,7 +108,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-// 文章列表卡片
+// Article list card
 function ArticleListCard({
   articles,
   fetchedAt,
@@ -118,9 +118,9 @@ function ArticleListCard({
 }) {
   return (
     <div className="space-y-4 p-6 border rounded-lg">
-      <h2 className="text-lg font-semibold">文章列表（服务端预取）</h2>
+      <h2 className="text-lg font-semibold">Article List (server-prefetched)</h2>
       <p className="text-sm text-muted-foreground">
-        数据通过 loader 在服务端获取，页面加载时已可用
+        Data is fetched via the loader on the server and is available as soon as the page loads
       </p>
       <div className="space-y-3">
         {articles.map((article) => (
@@ -128,13 +128,13 @@ function ArticleListCard({
         ))}
       </div>
       <p className="text-xs text-muted-foreground">
-        数据获取时间: {new Date(fetchedAt).toLocaleString("zh-CN")}
+        Fetched at: {new Date(fetchedAt).toLocaleString("en-US")}
       </p>
     </div>
   );
 }
 
-// 单篇文章项
+// Single article item
 function ArticleItem({
   article,
 }: {
@@ -153,38 +153,38 @@ function ArticleItem({
   );
 }
 
-// SSR 原理说明
+// SSR explanation
 function SSRExplanation() {
   return (
     <div className="space-y-3 p-6 border rounded-lg bg-muted/30">
-      <h2 className="text-lg font-semibold">SSR 工作原理</h2>
+      <h2 className="text-lg font-semibold">How SSR Works</h2>
       <div className="text-sm text-muted-foreground space-y-2">
         <p>
-          <strong>1. 服务端渲染：</strong>
-          用户请求页面时，服务端执行路由 loader，获取数据并渲染完整 HTML。
+          <strong>1. Server-side rendering:</strong>{" "}
+          When a user requests the page, the server runs the route loader, fetches data, and renders full HTML.
         </p>
         <p>
-          <strong>2. 客户端水合：</strong>
-          浏览器接收 HTML 后，React 进行水合（hydration），绑定事件监听器。
+          <strong>2. Client hydration:</strong>{" "}
+          After the browser receives the HTML, React hydrates it and attaches event listeners.
         </p>
         <p>
-          <strong>3. 优势：</strong>
-          首屏加载快、SEO 友好、用户无需等待数据加载即可看到内容。
+          <strong>3. Benefits:</strong>{" "}
+          Fast initial paint, SEO-friendly, and users see content without waiting for data to load.
         </p>
       </div>
       <p className="text-xs text-muted-foreground">
-        验证方法：右键"查看页面源代码"，可以看到文章列表数据已嵌入 HTML 中
+        To verify: right-click and &quot;View Page Source&quot; — you&apos;ll see the article list data already embedded in the HTML
       </p>
     </div>
   );
 }
 
-// 返回首页链接
+// Back to home link
 function BackToHomeLink() {
   return (
     <div className="text-center pt-4">
       <Link to="/">
-        <Button variant="outline">← 返回首页</Button>
+        <Button variant="outline">← Back to home</Button>
       </Link>
     </div>
   );

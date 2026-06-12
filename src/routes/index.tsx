@@ -55,7 +55,7 @@ type OneTapPromptDetail = {
   reasonDescription: string;
 };
 
-// Google One Tap 类型声明
+// Google One Tap type declarations
 declare global {
   interface Window {
     google?: {
@@ -81,29 +81,29 @@ const ONE_TAP_LOG_PREFIX = "[Header.useEffect]";
 const GOOGLE_GSI_SCRIPT_ID = "google-gsi-client-script";
 
 const ONE_TAP_NOT_DISPLAYED_REASON_TEXT: Record<string, string> = {
-  browser_not_supported: "浏览器不支持 Google One Tap。",
-  invalid_client: "Google Client ID 无效或与当前域名不匹配。",
-  missing_client_id: "缺少 Google Client ID。",
-  secure_http_required: "One Tap 需要在 HTTPS 或 localhost 下运行。",
-  suppressed_by_user: "用户此前关闭过 One Tap，当前被抑制展示。",
-  unregistered_origin: "当前页面域名未在 Google OAuth 配置中注册。",
-  opt_out_or_no_session: "用户未满足展示条件（退出/无 Google 会话）。",
-  unknown_reason: "浏览器隐私策略或 FedCM 接管导致原因未公开。",
+  browser_not_supported: "Browser does not support Google One Tap.",
+  invalid_client: "Google Client ID is invalid or does not match the current domain.",
+  missing_client_id: "Google Client ID is missing.",
+  secure_http_required: "One Tap requires HTTPS or localhost.",
+  suppressed_by_user: "User previously dismissed One Tap; currently suppressed.",
+  unregistered_origin: "Current page origin is not registered in Google OAuth settings.",
+  opt_out_or_no_session: "User does not meet display conditions (opted out or no Google session).",
+  unknown_reason: "Reason not disclosed due to browser privacy policy or FedCM takeover.",
 };
 
 const ONE_TAP_SKIPPED_REASON_TEXT: Record<string, string> = {
-  auto_cancel: "用户正在执行其他交互，One Tap 被自动取消。",
-  user_cancel: "用户手动关闭了 One Tap。",
-  tap_outside: "用户点击弹层外部，One Tap 被关闭。",
-  issuing_failed: "Google 凭据下发失败。",
-  unknown_reason: "浏览器只返回了通用跳过原因（常见于隐私限制/FedCM）。",
+  auto_cancel: "User was performing another interaction; One Tap was auto-cancelled.",
+  user_cancel: "User manually closed One Tap.",
+  tap_outside: "User clicked outside the prompt; One Tap was dismissed.",
+  issuing_failed: "Google credential issuance failed.",
+  unknown_reason: "Browser returned only a generic skip reason (common with privacy restrictions/FedCM).",
 };
 
 const ONE_TAP_DISMISSED_REASON_TEXT: Record<string, string> = {
-  credential_returned: "用户已返回凭据。",
-  cancel_called: "代码主动调用了取消。",
-  flow_restarted: "One Tap 流程被重启。",
-  unknown_reason: "未提供可识别的关闭原因。",
+  credential_returned: "User returned a credential.",
+  cancel_called: "Cancel was called programmatically.",
+  flow_restarted: "One Tap flow was restarted.",
+  unknown_reason: "No recognizable dismiss reason was provided.",
 };
 
 function logOneTapInfo(message: string, detail?: Record<string, unknown>) {
@@ -113,7 +113,7 @@ function logOneTapInfo(message: string, detail?: Record<string, unknown>) {
     : `${ONE_TAP_LOG_PREFIX} ${message}`;
   console.info(text);
   if (detail) {
-    console.info(`${ONE_TAP_LOG_PREFIX} ${message} 对象:`, detail);
+    console.info(`${ONE_TAP_LOG_PREFIX} ${message} object:`, detail);
   }
 }
 
@@ -124,7 +124,7 @@ function logOneTapWarn(message: string, detail?: Record<string, unknown>) {
     : `${ONE_TAP_LOG_PREFIX} ${message}`;
   console.warn(text);
   if (detail) {
-    console.warn(`${ONE_TAP_LOG_PREFIX} ${message} 对象:`, detail);
+    console.warn(`${ONE_TAP_LOG_PREFIX} ${message} object:`, detail);
   }
 }
 
@@ -135,7 +135,7 @@ function logOneTapError(message: string, detail?: Record<string, unknown>) {
     : `${ONE_TAP_LOG_PREFIX} ${message}`;
   console.error(text);
   if (detail) {
-    console.error(`${ONE_TAP_LOG_PREFIX} ${message} 对象:`, detail);
+    console.error(`${ONE_TAP_LOG_PREFIX} ${message} object:`, detail);
   }
 }
 
@@ -167,7 +167,7 @@ function resolveOneTapPromptDetail(
       reason,
       reasonDescription:
         ONE_TAP_NOT_DISPLAYED_REASON_TEXT[reason] ||
-        `未预置的 not_displayed 原因: ${reason}`,
+        `Unknown not_displayed reason: ${reason}`,
     };
   }
 
@@ -178,7 +178,7 @@ function resolveOneTapPromptDetail(
       reason,
       reasonDescription:
         ONE_TAP_SKIPPED_REASON_TEXT[reason] ||
-        `未预置的 skipped 原因: ${reason}`,
+        `Unknown skipped reason: ${reason}`,
     };
   }
 
@@ -189,14 +189,14 @@ function resolveOneTapPromptDetail(
       reason,
       reasonDescription:
         ONE_TAP_DISMISSED_REASON_TEXT[reason] ||
-        `未预置的 dismissed 原因: ${reason}`,
+        `Unknown dismissed reason: ${reason}`,
     };
   }
 
   return {
     moment: "displayed",
     reason: "displayed",
-    reasonDescription: "One Tap 已展示（或进入凭据返回阶段）。",
+    reasonDescription: "One Tap displayed (or credential return phase entered).",
   };
 }
 
@@ -262,18 +262,18 @@ function Home() {
     session: SessionUser;
   };
 
-  // TanStack Query 示例：使用 Server Function
+  // TanStack Query example: using a Server Function
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["hello", "Template"],
     queryFn: () => getHello({ data: { name: "Template" } }),
     enabled: false,
   });
 
-  // Zustand 示例：简单的全局状态管理
+  // Zustand example: simple global state management
   const { count, increment, decrement, reset } = useCounterStore();
 
-  // Hono RPC 示例状态
-  const [rpcName, setRpcName] = React.useState("世界");
+  // Hono RPC example state
+  const [rpcName, setRpcName] = React.useState("World");
   const [rpcResult, setRpcResult] = React.useState<string>("");
   const [rpcLoading, setRpcLoading] = React.useState(false);
   const [rpcError, setRpcError] = React.useState<string>("");
@@ -311,7 +311,7 @@ function Home() {
 
   const handleGoogleOneTapCallback = React.useCallback(
     async (response: { credential: string }) => {
-      logOneTapInfo("收到 One Tap credential 回调", {
+      logOneTapInfo("Received One Tap credential callback", {
         hasCredential: Boolean(response.credential),
         credentialLength: response.credential?.length || 0,
       });
@@ -320,18 +320,18 @@ function Home() {
           data: { credential: response.credential },
         })) as GoogleVerifyResult;
 
-        logOneTapInfo("One Tap credential 校验成功，写入会话并刷新页面", {
+        logOneTapInfo("One Tap credential verified; writing session and reloading page", {
           userEmail: result.user.email,
           userSub: result.user.sub,
         });
         document.cookie = `demo_session=${result.credential}; path=/; max-age=86400; SameSite=Lax`;
         window.location.reload();
       } catch (error) {
-        const message = error instanceof Error ? error.message : "未知错误";
-        logOneTapError("One Tap credential 校验失败", {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        logOneTapError("One Tap credential verification failed", {
           errorMessage: message,
         });
-        alert(`Google 登录失败: ${message}`);
+        alert(`Google sign-in failed: ${message}`);
       }
     },
     [],
@@ -347,28 +347,28 @@ function Home() {
       };
 
       if (detail.moment === "displayed") {
-        logOneTapInfo("One Tap 已展示", logPayload);
+        logOneTapInfo("One Tap displayed", logPayload);
         return;
       }
 
       if (detail.moment === "dismissed") {
-        logOneTapInfo("One Tap 已结束", logPayload);
+        logOneTapInfo("One Tap dismissed", logPayload);
         return;
       }
 
       if (detail.moment === "not_displayed") {
-        logOneTapWarn(`One Tap 未展示: ${detail.reason}`, logPayload);
+        logOneTapWarn(`One Tap not displayed: ${detail.reason}`, logPayload);
         return;
       }
 
-      logOneTapWarn(`One Tap 被跳过: ${detail.reason}`, logPayload);
+      logOneTapWarn(`One Tap skipped: ${detail.reason}`, logPayload);
     },
     [],
   );
 
   React.useEffect(() => {
     if (session) {
-      logOneTapInfo("用户已登录，跳过 One Tap 初始化");
+      logOneTapInfo("User is already signed in; skipping One Tap initialization");
       return;
     }
 
@@ -377,18 +377,18 @@ function Home() {
       | undefined;
 
     if (!googleClientId) {
-      logOneTapWarn("缺少 VITE_GOOGLE_CLIENT_ID，跳过 One Tap 初始化");
+      logOneTapWarn("VITE_GOOGLE_CLIENT_ID is missing; skipping One Tap initialization");
       return;
     }
 
     if (window.__googleOneTapInitialized) {
-      logOneTapInfo("One Tap 已初始化过，跳过重复初始化");
+      logOneTapInfo("One Tap already initialized; skipping duplicate initialization");
       return;
     }
 
     const initializeGoogleOneTap = () => {
       if (!window.google?.accounts?.id) {
-        logOneTapWarn("Google GSI 脚本已加载，但 window.google.accounts.id 不可用");
+        logOneTapWarn("Google GSI script loaded but window.google.accounts.id is unavailable");
         return;
       }
 
@@ -401,7 +401,7 @@ function Home() {
       });
 
       window.__googleOneTapInitialized = true;
-      logOneTapInfo("One Tap 初始化完成，开始 prompt", {
+      logOneTapInfo("One Tap initialization complete; starting prompt", {
         clientIdPrefix: googleClientId.slice(0, 10),
         useFedCMForPrompt: false,
       });
@@ -413,7 +413,7 @@ function Home() {
     ) as HTMLScriptElement | null;
 
     if (existingScript) {
-      logOneTapInfo("检测到已有 Google GSI 脚本，复用脚本并尝试初始化");
+      logOneTapInfo("Existing Google GSI script detected; reusing script and attempting initialization");
       initializeGoogleOneTap();
       return;
     }
@@ -425,21 +425,21 @@ function Home() {
     script.defer = true;
 
     script.onload = () => {
-      logOneTapInfo("Google GSI 脚本加载完成");
+      logOneTapInfo("Google GSI script loaded");
       initializeGoogleOneTap();
     };
 
     script.onerror = () => {
-      logOneTapError("Google GSI 脚本加载失败", {
+      logOneTapError("Google GSI script failed to load", {
         scriptSrc: script.src,
       });
     };
 
-    logOneTapInfo("开始加载 Google GSI 脚本", { scriptSrc: script.src });
+    logOneTapInfo("Loading Google GSI script", { scriptSrc: script.src });
     document.head.appendChild(script);
   }, [handleGoogleOneTapCallback, handleOneTapPromptNotification, session]);
 
-  // 测试 GET 请求
+  // Test GET request
   const testRpcGet = async () => {
     setRpcLoading(true);
     setRpcError("");
@@ -450,13 +450,13 @@ function Home() {
       const response = await res.json();
       setRpcResult(response.message);
     } catch (err) {
-      setRpcError(err instanceof Error ? err.message : "请求失败");
+      setRpcError(err instanceof Error ? err.message : "Request failed");
     } finally {
       setRpcLoading(false);
     }
   };
 
-  // 测试 POST 请求
+  // Test POST request
   const testRpcPost = async () => {
     setRpcLoading(true);
     setRpcError("");
@@ -467,7 +467,7 @@ function Home() {
       const response = await res.json();
       setRpcResult(response.message);
     } catch (err) {
-      setRpcError(err instanceof Error ? err.message : "请求失败");
+      setRpcError(err instanceof Error ? err.message : "Request failed");
     } finally {
       setRpcLoading(false);
     }
@@ -480,13 +480,13 @@ function Home() {
           TanStack Start + Cloudflare Workers
         </h1>
         <p className="text-muted-foreground">
-          全栈开发模板：TanStack Start + React + Cloudflare Workers
+          Full-stack template: TanStack Start + React + Cloudflare Workers
         </p>
 
         <div className="space-y-4 rounded-lg border p-6 text-left">
-          <h2 className="text-lg font-semibold">Social 登录 Demo</h2>
+          <h2 className="text-lg font-semibold">Social Login Demo</h2>
           <p className="text-sm text-muted-foreground">
-            Hub 域名默认使用 <code>https://pro.windseed.app</code>
+            Hub default domain: <code>https://pro.windseed.app</code>
           </p>
 
           {session ? (
@@ -496,13 +496,13 @@ function Home() {
                   <User className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="font-medium">{session.name || session.email || "已登录用户"}</p>
+                  <p className="font-medium">{session.name || session.email || "Signed-in user"}</p>
                   <p className="text-sm text-muted-foreground">{session.email || session.sub}</p>
                 </div>
               </div>
               <Button variant="outline" className="gap-2" onClick={handleLogout}>
                 <LogOut className="h-4 w-4" />
-                退出登录
+                Sign out
               </Button>
             </div>
           ) : (
@@ -513,18 +513,18 @@ function Home() {
                 className="gap-2 border bg-white text-gray-700 hover:bg-gray-100"
               >
                 <GoogleIcon />
-                Google 登录
+                Sign in with Google
               </Button>
               <Button onClick={handleLogin} className="gap-2">
                 <LogIn className="h-4 w-4" />
-                第三方登录
+                Sign in
               </Button>
             </div>
           )}
         </div>
 
         <div className="space-y-4 rounded-lg border p-6">
-          <h2 className="text-lg font-semibold">TanStack Query 示例</h2>
+          <h2 className="text-lg font-semibold">TanStack Query Example</h2>
           <Button onClick={() => refetch()} disabled={isLoading}>
             {isLoading ? "Loading..." : "Test Server Function"}
           </Button>
@@ -535,7 +535,7 @@ function Home() {
         </div>
 
         <div className="space-y-4 rounded-lg border p-6">
-          <h2 className="text-lg font-semibold">Zustand 示例</h2>
+          <h2 className="text-lg font-semibold">Zustand Example</h2>
           <p className="text-2xl font-mono">{count}</p>
           <div className="flex justify-center gap-2">
             <Button variant="outline" onClick={decrement}>
@@ -551,46 +551,46 @@ function Home() {
         </div>
 
         <div className="space-y-4 rounded-lg border p-6">
-          <h2 className="text-lg font-semibold">Hono RPC 示例</h2>
-          <p className="text-sm text-muted-foreground">类型安全的前后端通信</p>
+          <h2 className="text-lg font-semibold">Hono RPC Example</h2>
+          <p className="text-sm text-muted-foreground">Type-safe client–server communication</p>
           <div className="flex items-center justify-center gap-2">
             <Input
               type="text"
               value={rpcName}
               onChange={(e) => setRpcName(e.target.value)}
-              placeholder="输入名字"
+              placeholder="Enter a name"
               className="max-w-xs"
             />
           </div>
           <div className="flex justify-center gap-2">
             <Button onClick={testRpcGet} disabled={rpcLoading}>
-              {rpcLoading ? "Loading..." : "测试 GET"}
+              {rpcLoading ? "Loading..." : "Test GET"}
             </Button>
             <Button onClick={testRpcPost} disabled={rpcLoading} variant="secondary">
-              {rpcLoading ? "Loading..." : "测试 POST"}
+              {rpcLoading ? "Loading..." : "Test POST"}
             </Button>
           </div>
-          {rpcError && <p className="text-sm text-destructive">错误: {rpcError}</p>}
+          {rpcError && <p className="text-sm text-destructive">Error: {rpcError}</p>}
           {rpcResult && (
             <p className="rounded-md bg-muted px-4 py-2 text-foreground">{rpcResult}</p>
           )}
         </div>
 
         <div className="space-y-4 rounded-lg border p-6">
-          <h2 className="text-lg font-semibold">示例页面</h2>
+          <h2 className="text-lg font-semibold">Examples</h2>
           <div className="flex justify-center gap-2">
             <Link to="/ssr">
-              <Button variant="outline">SSR 示例 →</Button>
+              <Button variant="outline">SSR Example →</Button>
             </Link>
           </div>
           <p className="text-sm text-muted-foreground">
-            查看路由 loader 服务端数据预取示例
+            View the route loader server-side data prefetching example
           </p>
         </div>
 
         <div className="pt-4 text-sm text-muted-foreground">
           <p>
-            编辑 <code className="rounded bg-muted px-1">src/routes/index.tsx</code> 开始开发
+            Edit <code className="rounded bg-muted px-1">src/routes/index.tsx</code> to get started
           </p>
         </div>
       </div>

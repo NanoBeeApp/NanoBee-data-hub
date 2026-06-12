@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 
-// 替代原来的 /api/hello
+// Replaces the original /api/hello
 export const getHello = createServerFn({ method: "GET" })
   .inputValidator((input: { name?: string }) => input)
   .handler(async ({ data }) => {
@@ -8,7 +8,7 @@ export const getHello = createServerFn({ method: "GET" })
     return { message: `Hello, ${name}!` as const };
   });
 
-// 替代原来的 /api/health
+// Replaces the original /api/health
 export const getHealth = createServerFn({ method: "GET" }).handler(async () => {
   return { ok: true, timestamp: new Date().toISOString() };
 });
