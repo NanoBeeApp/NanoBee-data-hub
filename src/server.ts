@@ -18,7 +18,11 @@ export default {
 	async fetch(request: Request, env: unknown, ctx: unknown) {
 		const url = new URL(request.url);
 
-		if (url.pathname.startsWith("/api") || url.pathname === "/health") {
+		if (
+			url.pathname.startsWith("/api") ||
+			url.pathname === "/health" ||
+			url.pathname === "/mcp"
+		) {
 			return apiWorker.fetch(request, env as never, ctx as never);
 		}
 

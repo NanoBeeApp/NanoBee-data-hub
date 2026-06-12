@@ -8,6 +8,7 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { CONFIG } from './config';
 import { apiRoutes } from './routes/api';
+import { mcpRoutes } from './routes/mcp';
 import { sourceRoutes } from './routes/sources';
 
 // Define the Worker environment type
@@ -27,6 +28,8 @@ app.use('*', cors(CONFIG.CORS)); // CORS middleware
 app.route('/api', apiRoutes);
 // Generic data-source gateway (catalog + invoke); see routes/sources.ts
 app.route('/api/sources', sourceRoutes);
+// Standard MCP server over the same registry; see routes/mcp.ts
+app.route('/mcp', mcpRoutes);
 
 // Health-check endpoint
 app.get('/health', (c) => {

@@ -1,24 +1,31 @@
-# sources/registry.ts
+# src/worker/sources/registry.ts
 
-## 文件职责
-集中注册所有数据源，并向 HTTP 层提供发现（`listSources`）、查找（`getSource`）、参数归一（`coerceParams`）能力。新增数据源只需 import 并加入 `SOURCES` 数组。
+## Responsibility
+Central registration of all data sources, plus discovery (`listSources`),
+lookup (`getSource`) and parameter normalization (`coerceParams`) for the
+HTTP layers. Adding a source = import it and append to `SOURCES`.
 
-## 核心导出 / API
-- `listSources(): SourceDescriptor[]` — 返回 catalog（仅描述，不含 fetch）
-- `getSource(id): DataSource | undefined` — 按 id 查源
-- `coerceParams(declared, raw)` — 按声明类型把原始参数转型并应用默认值
+## Core exports / API
+- `listSources(): SourceDescriptor[]` — the catalog (descriptors only)
+- `getSource(id): DataSource | undefined`
+- `coerceParams(declared, raw)` — coerce raw values to declared types and
+  apply defaults
 
-## 依赖关系
-- 上游：`routes/sources.ts`
-- 下游：`./types`、各数据源模块（`./hackernews` 等）
+## Dependencies
+- Upstream: `routes/sources.ts`, `routes/mcp.ts`
+- Downstream: `./types`, source modules (`./hackernews`, ...)
 
-## 关键实现思路
-- 用 `Map` 做 id→源索引，O(1) 查找。
-- `coerceParams` 把解析/默认值逻辑收敛到一处，各源 `fetch` 专注业务。
+## Notes
+- `Map`-backed id lookup; `coerceParams` centralizes parsing so each
+  source's `fetch` stays business-only.
 
-## 变更历史
+## Change history
 
-### 2026-06-12 — 创建
-- **出发点**：避免每个数据源写一条专属路由
-- **目标**：消费方通过 catalog 发现数据源，而非硬编码 id
-- **关键决策**：注册表 + 通用 HTTP 层，新增源零路由改动
+### 2026-06-12 — created
+- **Motivation**: avoid one bespoke route per source; consumers discover
+  sources through the catalog instead of hardcoding ids.
+- **Key decision**: registry + generic HTTP surface — zero route changes per
+  new source.
+
+### 2026-06-12 — doc rewritten in English
+- **Motivation**: this is a public repository; all docs must be English.
