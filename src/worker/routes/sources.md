@@ -26,3 +26,7 @@ every source, no per-source routes.
 
 ### 2026-06-12 — doc rewritten in English
 - **Motivation**: this is a public repository; all docs must be English.
+
+### 2026-06-13 — redact secret params in logs
+- **Motivation**: sources may declare `secret: true` params (API keys).
+- **Goal**: fetch logging masks secret values via `redactSecretParams`.

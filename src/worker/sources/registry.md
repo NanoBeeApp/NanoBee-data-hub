@@ -29,3 +29,9 @@ HTTP layers. Adding a source = import it and append to `SOURCES`.
 
 ### 2026-06-12 — doc rewritten in English
 - **Motivation**: this is a public repository; all docs must be English.
+
+### 2026-06-13 — websearch registered + `redactSecretParams`
+- **Motivation**: the Tavily source carries a secret param; gateway logs must
+  never contain credential values.
+- **Goal**: register `webSearch`; export `redactSecretParams(declared,
+  params)` used by both HTTP surfaces before logging.

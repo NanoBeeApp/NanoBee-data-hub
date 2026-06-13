@@ -35,3 +35,9 @@ unlimited sources".
 
 ### 2026-06-12 — doc rewritten in English
 - **Motivation**: this is a public repository; all docs must be English.
+
+### 2026-06-13 — `secret` param flag
+- **Motivation**: the websearch source takes an API key; credential params
+  must be redacted from logs and injected server-side by consumers.
+- **Goal**: `SourceParam.secret?: boolean`, honored by the gateway's logging
+  (`redactSecretParams`) and by consumers' tool builders.

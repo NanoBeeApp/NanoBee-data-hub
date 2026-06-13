@@ -13,7 +13,12 @@
 
 import { Hono } from 'hono';
 import type { Env } from '../api-worker';
-import { coerceParams, getSource, listSources } from '../sources/registry';
+import {
+  coerceParams,
+  getSource,
+  listSources,
+  redactSecretParams,
+} from '../sources/registry';
 import type { SourceParam } from '../sources/types';
 
 const PROTOCOL_VERSION = '2025-03-26';
@@ -67,7 +72,24 @@ export const mcpRoutes = new Hono<{ Bindings: Env }>()
     }
 
     const { id, method, params } = req;
-    console.log('[MCP] request:', method, JSON.stringify(params ?? {}));
+    // tools/call arguments may carry secret params — redact before logging.
+    if (method === 'tools/call') {
+      const callee = typeof params?.name === 'string' ? getSource(params.name) : undefined;
+      const args =
+        params && typeof params.arguments === 'object' && params.arguments !== null
+          ? (params.arguments as Record<string, unknown>)
+          : {};
+      console.log(
+        '[MCP] request: tools/call',
+        params?.name,
+        // Unknown tool: keys only — the values could be anything, incl. secrets.
+        callee
+          ? JSON.stringify(redactSecretParams(callee.params, args))
+          : `(unknown tool; arg keys: ${Object.keys(args).join(',')})`
+      );
+    } else {
+      console.log('[MCP] request:', method, JSON.stringify(params ?? {}));
+    }
 
     // Notifications carry no id and expect 202 with no body.
     if (id === undefined && method.startsWith('notifications/')) {

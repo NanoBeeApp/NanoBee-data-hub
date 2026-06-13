@@ -11,9 +11,10 @@
  */
 
 import { hackerNews } from "./hackernews";
+import { webSearch } from "./websearch";
 import type { DataSource, SourceDescriptor, SourceParam } from "./types";
 
-const SOURCES: DataSource[] = [hackerNews];
+const SOURCES: DataSource[] = [hackerNews, webSearch];
 
 const BY_ID = new Map(SOURCES.map((s) => [s.id, s]));
 
@@ -30,6 +31,20 @@ export function listSources(): SourceDescriptor[] {
 /** Look up a source by id, or undefined when unknown. */
 export function getSource(id: string): DataSource | undefined {
 	return BY_ID.get(id);
+}
+
+/** Copy of `params` with secret values masked, safe for logging. */
+export function redactSecretParams(
+	declared: SourceParam[],
+	params: Record<string, unknown>,
+): Record<string, unknown> {
+	const secretNames = new Set(declared.filter((p) => p.secret).map((p) => p.name));
+	if (secretNames.size === 0) return params;
+	const out: Record<string, unknown> = { ...params };
+	for (const name of secretNames) {
+		if (out[name] !== undefined) out[name] = "***";
+	}
+	return out;
 }
 
 /**

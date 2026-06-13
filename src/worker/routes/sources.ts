@@ -12,7 +12,12 @@
 
 import { Hono } from "hono";
 import type { Env } from "../api-worker";
-import { coerceParams, getSource, listSources } from "../sources/registry";
+import {
+	coerceParams,
+	getSource,
+	listSources,
+	redactSecretParams,
+} from "../sources/registry";
 
 export const sourceRoutes = new Hono<{ Bindings: Env }>()
 	// GET /api/sources — discover the catalog
@@ -40,7 +45,11 @@ export const sourceRoutes = new Hono<{ Bindings: Env }>()
 		}
 
 		const params = coerceParams(source.params, raw);
-		console.log("[API] POST /api/sources/%s/fetch, params:", id, JSON.stringify(params));
+		console.log(
+			"[API] POST /api/sources/%s/fetch, params:",
+			id,
+			JSON.stringify(redactSecretParams(source.params, params)),
+		);
 
 		try {
 			const result = await source.fetch(params, c.env);

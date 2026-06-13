@@ -33,3 +33,7 @@ etc.) can discover and call the hub's sources without bespoke glue.
   client and dogfoods the protocol end-to-end locally.
 - **Key decision**: stateless plain-JSON implementation (~140 lines, no SDK)
   — sessions and SSE streams add nothing for a read-only tools server.
+
+### 2026-06-13 — redact secret params in tools/call logs
+- **Motivation**: same credential-hygiene as the REST surface; unknown-tool
+  calls log argument keys only.

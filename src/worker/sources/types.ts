@@ -24,6 +24,12 @@ export interface SourceParam {
 	enum?: string[];
 	/** Default applied when the caller omits the param. */
 	default?: string | number | boolean;
+	/**
+	 * Marks a credential-bearing param (e.g. an API key). Secret values are
+	 * redacted from gateway logs, and consumers should inject them
+	 * server-side instead of exposing them to an LLM.
+	 */
+	secret?: boolean;
 }
 
 /** Public, LLM-readable description of a source (no fetch logic). */
