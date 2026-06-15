@@ -1,3 +1,13 @@
+# Repository Layout: Public vs Private (Important — Must Follow)
+- This repo (`NanoBeeApp/NanoBee-data-hub`) is **public**. It must contain **only public-facing code and public documentation**.
+- A **private** repo is nested at `private/` (remote: `NanoBee-data-hub-private`, ignored by the public repo's `.gitignore`). **All development by-products go into `private/`**, including but not limited to:
+  - **Screenshots / screen captures → `private/screenshots/`** (NEVER the repo root, NEVER a top-level `screenshots/`).
+  - Verification / debugging / explanatory artifacts → `private/`.
+  - Chat history, planning notes, internal PRDs, logs, scratch design files → `private/` (e.g. `private/docs/`, `private/logs/`, `private/planning/`).
+- **🚨 This OVERRIDES the global rule** "screenshots must go in `screenshots/`". In THIS project, screenshots go in **`private/screenshots/`**, not a root-level `screenshots/`. Before saving any screenshot (Playwright captures, `browser_take_screenshot`, manual saves), write it under `private/screenshots/`. If a root `screenshots/` ever appears, move its contents into `private/screenshots/` and delete the root folder.
+- **Rule of thumb**: if a file is not "public-facing code or public documentation", it belongs in `private/`; when unsure, default to `private/`.
+- **Versioning**: changes under `private/` → `cd private && git add/commit/push` to the private remote. Public-repo changes → commit at the repo root (`private/` is auto-ignored). Never commit `private/` contents into the public repo.
+
 # Basics
 - Converse with the user in Chinese, but write ALL code comments and documentation in English (this is a public repository).
 - Every code file that contains business logic must have a corresponding `.md` file with the same name, documenting the requirements, implementation details, and a concrete verification plan or step-by-step procedure. If a code file is missing its corresponding `.md` file, create one. Whenever code is modified, always update the `.md` file in sync.

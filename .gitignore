@@ -204,3 +204,4 @@ html-samples
 !logs/crawl-cache.json
 .playwright-mcp/logs
 private
+screenshots
