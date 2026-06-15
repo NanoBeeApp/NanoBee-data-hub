@@ -28,6 +28,12 @@ Real-time US stock / ETF quotes. Answers chat questions about US equity prices
   after-hours) is derived from the extended timestamp in US-Eastern time via
   `Intl` (no TZ dependency, DST-correct). Spot gold (`gold.ts`) has no extended
   hours — it trades ~23h/5d continuously — so this only applies to equities.
+- Staleness: Twelve Data keeps serving the LAST after-hours print after the
+  window closes (Friday's 19:59 close is returned all weekend). An extended
+  print is treated as live only when it is within `EXT_LIVE_WINDOW_MS` (30 min)
+  of now; otherwise it is flagged stale (`extendedIsLive: false`) and labelled
+  "last after-hours … US market closed". The true overnight session (夜盘,
+  20:00–04:00 ET) and weekends are NOT covered by the free tier at all.
 
 ## Change history
 
@@ -51,3 +57,18 @@ Real-time US stock / ETF quotes. Answers chat questions about US equity prices
   extended timestamp in US-Eastern time via `Intl` (DST-correct, zero deps).
   Left `gold.ts` untouched — spot gold is a continuous ~23h market with no
   pre/post session.
+
+### 2026-06-15 — fix stale/overnight mislabeling
+- **Motivation**: a user (Sunday night ET) saw the QQQ "夜盘" figure and said it
+  was wrong. Root cause: Twelve Data's `extended_price` is the LAST after-hours
+  print (Friday 19:59 ET) — it kept being served all weekend, and the previous
+  version surfaced it as a fresh extended quote, so the model presented a
+  ~2.5-day-stale close as a live overnight (夜盘) price. The free tier has no
+  overnight (20:00–04:00 ET) or weekend data at all.
+- **Goal**: never pass off a stale prior-session close as the current overnight
+  price; be explicit that overnight/夜盘 data is unavailable.
+- **Key decision**: flag the extended print live only when it is within 30 min
+  of now (`EXT_LIVE_WINDOW_MS`); otherwise emit "last after-hours … US market
+  closed; overnight/夜盘 not available" and set `extendedIsLive: false`. Add the
+  weekday to the ET timestamp label and spell out the limitation in the source
+  description so the agent reports it honestly.
