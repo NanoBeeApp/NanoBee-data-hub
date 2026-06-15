@@ -30,3 +30,13 @@ every source, no per-source routes.
 ### 2026-06-13 — redact secret params in logs
 - **Motivation**: sources may declare `secret: true` params (API keys).
 - **Goal**: fetch logging masks secret values via `redactSecretParams`.
+
+### 2026-06-15 — cached read-through + write-through
+- **Motivation**: with the storage layer, the read path should serve the cached
+  scheduled snapshot fast and let on-demand fetches populate history too.
+- **Goal**: default to the `source_state.last_result` snapshot when a source is
+  persisted and the request is unparameterized; `?fresh=true` forces a live
+  fetch; live fetches write-through (history + snapshot) best-effort off the
+  response path.
+- **Key decision**: cache only when `snapshotEligible` (no narrowing params) so
+  specific queries always get live data; write-through never fails the request.

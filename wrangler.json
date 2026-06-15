@@ -14,6 +14,18 @@
 		"directory": "./dist/client",
 		"not_found_handling": "single-page-application"
 	},
+	"triggers": {
+		"crons": [
+			"*/5 * * * *"
+		]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "nanobee-data-hub-dev",
+			"database_id": "9517d9f0-71e1-4cf2-9d3b-9b2d22e7b599"
+		}
+	],
 	"env": {
 		"prod": {
 			"name": "init-hono-tanstack-rpc",
@@ -21,7 +33,19 @@
 		},
 		"dev": {
 			"name": "init-hono-tanstack-rpc-dev",
-			"vars": {}
+			"vars": {},
+			"triggers": {
+				"crons": [
+					"*/5 * * * *"
+				]
+			},
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "nanobee-data-hub-dev",
+					"database_id": "9517d9f0-71e1-4cf2-9d3b-9b2d22e7b599"
+				}
+			]
 		}
 	}
 }

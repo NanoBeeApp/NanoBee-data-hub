@@ -36,6 +36,11 @@ export function getSource(id: string): DataSource | undefined {
 	return BY_ID.get(id);
 }
 
+/** Sources that opted into scheduled background refresh (have a `schedule`). */
+export function listScheduledSources(): DataSource[] {
+	return SOURCES.filter((s) => s.schedule);
+}
+
 /** Copy of `params` with secret values masked, safe for logging. */
 export function redactSecretParams(
 	declared: SourceParam[],

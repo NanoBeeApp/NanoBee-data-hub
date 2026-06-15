@@ -19,7 +19,27 @@
  * source credential shared with the gold source), never a model-visible param.
  */
 
+import type { ObservationInput } from "../storage/types";
 import type { DataSource, SourceResult } from "./types";
+
+/**
+ * Default watchlist refreshed on the schedule (≤ 8 to respect the free-tier
+ * quota; one multi-symbol /quote call covers them all). The cached snapshot the
+ * read path serves for an unparameterized request is this set.
+ */
+const WATCHLIST = ["QQQ", "SPY", "DIA", "IWM", "AAPL", "NVDA", "TSLA", "MSFT"];
+
+/** Shape of each entry in a stocks `SourceResult.items` (see fetch() below). */
+interface StockItem {
+	symbol: string;
+	price: number | null;
+	change: number | null;
+	percentChange: number | null;
+	isMarketOpen: boolean | null;
+	extendedPrice: number | null;
+	extendedSession: string | null;
+	extendedAsOfEt: string | null;
+}
 
 interface TdQuote {
 	symbol?: string;
@@ -122,6 +142,47 @@ export const stocks: DataSource = {
 				"Comma-separated US tickers, e.g. 'AAPL' or 'QQQ,SPY,NVDA'. For indices use ETFs: Nasdaq→QQQ, S&P 500→SPY, Dow→DIA.",
 		},
 	],
+
+	// Persist each quote as a numeric time-series point so we can chart trends /
+	// water-levels / overnight change. The regular price and the extended-hours
+	// print are separate series per symbol.
+	persist: {
+		shape: "observations",
+		retention: { rawTtlDays: 90 },
+		toObservations(result: SourceResult): ObservationInput[] {
+			const ts = result.fetchedAt;
+			const obs: ObservationInput[] = [];
+			for (const it of result.items as StockItem[]) {
+				if (!it || typeof it.symbol !== "string") continue;
+				if (typeof it.price === "number") {
+					obs.push({
+						source: "stocks",
+						seriesKey: `${it.symbol}.price`,
+						ts,
+						value: it.price,
+						dims: { pct: it.percentChange, change: it.change, marketOpen: it.isMarketOpen },
+					});
+				}
+				if (typeof it.extendedPrice === "number") {
+					obs.push({
+						source: "stocks",
+						seriesKey: `${it.symbol}.extended`,
+						ts,
+						value: it.extendedPrice,
+						dims: { session: it.extendedSession, asOf: it.extendedAsOfEt },
+					});
+				}
+			}
+			return obs;
+		},
+	},
+
+	// Market-hours aware: refresh ~5min in the regular session, ~15min pre/after,
+	// and skip overnight / weekends / holidays (no point burning quota).
+	schedule: {
+		cadence: "market",
+		refreshParams: () => [{ symbols: WATCHLIST.join(",") }],
+	},
 
 	async fetch(params, env): Promise<SourceResult> {
 		const key = (env as { TWELVE_DATA_KEY?: string } | undefined)?.TWELVE_DATA_KEY;

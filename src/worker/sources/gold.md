@@ -39,3 +39,11 @@ live data instead of the model apologizing.
   caller-injected per-user secret), since gold is shared public data; derive
   per-gram USD/CNY server-side so a China-based user gets a directly usable
   number.
+
+### 2026-06-15 — persistence + scheduled refresh
+- **Motivation**: capture gold as a time-series for trend / overnight analysis.
+- **Goal**: persist oz / per-gram USD / per-gram CNY as observations; refresh on
+  a schedule.
+- **Key decision**: `persist.shape: "observations"`; `schedule.cadence:
+  "hourly"` (NOT `market`) — spot gold trades ~24h on weekdays, so an hourly
+  poll captures the overnight session the equity-hours gate would skip.

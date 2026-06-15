@@ -13,8 +13,15 @@
 
 import handler from "@tanstack/react-start/server-entry";
 import apiWorker from "./worker/api-worker";
+import { runScheduled } from "./worker/scheduler/scheduled";
 
 export default {
+	// Cloudflare Cron Trigger entry — see wrangler.json "triggers.crons".
+	// Walks every scheduled source, refreshes the due ones, persists history.
+	async scheduled(_event: unknown, env: unknown, ctx: { waitUntil(p: Promise<unknown>): void }) {
+		ctx.waitUntil(runScheduled(env));
+	},
+
 	async fetch(request: Request, env: unknown, ctx: unknown) {
 		const url = new URL(request.url);
 

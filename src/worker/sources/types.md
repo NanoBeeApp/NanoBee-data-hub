@@ -41,3 +41,12 @@ unlimited sources".
   must be redacted from logs and injected server-side by consumers.
 - **Goal**: `SourceParam.secret?: boolean`, honored by the gateway's logging
   (`redactSecretParams`) and by consumers' tool builders.
+
+### 2026-06-15 — optional persistence + schedule on a source
+- **Motivation**: sources need to declare how they persist and when they refresh
+  so the storage layer + scheduler can drive them generically.
+- **Goal**: add optional `persist: SourcePersistence` (shape + retention + result
+  → store mappers + snapshot eligibility) and `schedule: SourceSchedule`
+  (cadence + refresh params) to `DataSource`; add the `Cadence` type.
+- **Key decision**: both are OPTIONAL — a source with neither stays live-only and
+  on-demand, so existing sources are unaffected.

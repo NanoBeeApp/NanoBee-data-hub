@@ -29,3 +29,11 @@ questions.
   "what economic data is out this week / 本周重要数据" questions.
 - **Key decision**: use the free Forex Factory weekly JSON (no key); return a
   High-impact-first digest with optional currency/impact filters.
+
+### 2026-06-15 — persistence + scheduled refresh
+- **Motivation**: the hub gained a storage layer; macro events should be kept
+  (and full-text searchable) rather than re-fetched every request.
+- **Goal**: persist events as documents and refresh once a day.
+- **Key decision**: `persist.shape: "records"` (FTS-able), `itemKey =
+  country|date|title` for idempotent upsert, 30-day retention, `schedule.cadence:
+  "daily"`.

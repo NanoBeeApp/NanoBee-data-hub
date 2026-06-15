@@ -35,3 +35,9 @@ HTTP layers. Adding a source = import it and append to `SOURCES`.
   never contain credential values.
 - **Goal**: register `webSearch`; export `redactSecretParams(declared,
   params)` used by both HTTP surfaces before logging.
+
+### 2026-06-15 — register stocks/econ + `listScheduledSources`
+- **Motivation**: the scheduler needs the set of sources that opted into a
+  `schedule`.
+- **Goal**: register `stocks` + `econCalendar` in `SOURCES`; export
+  `listScheduledSources()` returning sources with a `schedule`.

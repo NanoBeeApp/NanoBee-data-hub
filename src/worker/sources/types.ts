@@ -13,6 +13,8 @@
  * register it. No new routes, no consumer-side changes.
  */
 
+import type { ObservationInput, RecordInput, RetentionPolicy } from "../storage/types";
+
 /** One declared parameter a source accepts (drives both validation and the
  *  machine-readable schema consumers feed to an LLM for tool selection). */
 export interface SourceParam {
@@ -51,11 +53,47 @@ export interface SourceResult {
 	items: unknown[];
 }
 
-/** A registered data source: its descriptor plus how to fetch it. */
+/** How often the scheduler refreshes a source. `market` = US-market-hours aware. */
+export type Cadence = "market" | "daily" | "hourly";
+
+/**
+ * Optional persistence behaviour. A source that sets this is captured into the
+ * store on every fetch (scheduled or on-demand), and its latest result can be
+ * served from cache by the read path. `shape` picks the storage form:
+ *   - "observations": numeric time-series (provide `toObservations`)
+ *   - "records":      documents/feed/web (provide `toRecords`)
+ */
+export interface SourcePersistence {
+	shape: "observations" | "records";
+	retention?: RetentionPolicy;
+	toObservations?(result: SourceResult): ObservationInput[];
+	toRecords?(result: SourceResult): RecordInput[];
+	/**
+	 * Whether the cached snapshot may serve a given request. Defaults to "only
+	 * when the caller passed no narrowing params" (see sources/persist.ts).
+	 */
+	snapshotEligible?(raw: Record<string, unknown>): boolean;
+}
+
+/** Optional scheduled-refresh behaviour. Omit to leave a source on-demand only. */
+export interface SourceSchedule {
+	cadence: Cadence;
+	/**
+	 * The param set(s) to fetch on each scheduled tick. The FIRST set is treated
+	 * as the canonical snapshot served by the cached read path.
+	 */
+	refreshParams(): Record<string, string | number | boolean>[];
+}
+
+/** A registered data source: its descriptor plus how to fetch (and persist) it. */
 export interface DataSource extends SourceDescriptor {
 	/**
 	 * Fetch live data. `params` has already been coerced/defaulted against
 	 * `this.params`. `env` exposes Worker bindings for sources that need them.
 	 */
 	fetch(params: Record<string, string | number | boolean>, env: unknown): Promise<SourceResult>;
+	/** Opt into persistence (history + cached snapshot). */
+	persist?: SourcePersistence;
+	/** Opt into scheduled background refresh. */
+	schedule?: SourceSchedule;
 }

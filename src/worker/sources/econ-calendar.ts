@@ -11,6 +11,7 @@
  * forecast / previous values. Optional filters narrow by currency and impact.
  */
 
+import type { RecordInput } from "../storage/types";
 import type { DataSource, SourceResult } from "./types";
 
 interface FfEvent {
@@ -61,6 +62,44 @@ export const econCalendar: DataSource = {
 			description: "Filter by impact level. Omit for all levels.",
 		},
 	],
+
+	// Persist each event as a document record (FTS-searchable). Events are weekly
+	// and low-volume, so a 30-day retention keeps recent history without growth.
+	persist: {
+		shape: "records",
+		retention: { rawTtlDays: 30 },
+		toRecords(result: SourceResult): RecordInput[] {
+			return (result.items as FfEvent[])
+				.filter((e) => e && e.title)
+				.map((e) => {
+					let ts: string | undefined;
+					try {
+						ts = e.date ? new Date(e.date).toISOString() : undefined;
+					} catch {
+						ts = undefined;
+					}
+					const country = e.country ?? "?";
+					const impact = e.impact ?? "?";
+					return {
+						source: "econ_calendar",
+						itemKey: `${country}|${e.date ?? "?"}|${e.title}`,
+						ts,
+						title: e.title,
+						summary: `[${impact}] ${country} · forecast ${e.forecast || "—"}, prev ${e.previous || "—"}`,
+						body: `${e.title} ${country}`,
+						lang: "en",
+						tags: [country, impact],
+						payload: e,
+					};
+				});
+		},
+	},
+
+	// Macro calendar changes slowly — refresh once a day (and on demand).
+	schedule: {
+		cadence: "daily",
+		refreshParams: () => [{}],
+	},
 
 	async fetch(params): Promise<SourceResult> {
 		const res = await fetch("https://nfs.faireconomy.media/ff_calendar_thisweek.json", {

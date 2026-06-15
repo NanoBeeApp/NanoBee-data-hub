@@ -72,3 +72,13 @@ Real-time US stock / ETF quotes. Answers chat questions about US equity prices
   closed; overnight/夜盘 not available" and set `extendedIsLive: false`. Add the
   weekday to the ET timestamp label and spell out the limitation in the source
   description so the agent reports it honestly.
+
+### 2026-06-15 — persistence + scheduled refresh
+- **Motivation**: the hub gained a storage layer; quotes should be captured as a
+  time-series so trend / water-level / overnight-change analysis is possible.
+- **Goal**: persist each quote (regular + extended) as observations and refresh
+  a default watchlist on a market-hours-aware schedule.
+- **Key decision**: `persist.shape: "observations"` (`<sym>.price` /
+  `<sym>.extended`); `schedule.cadence: "market"` over an 8-symbol `WATCHLIST`
+  (one multi-symbol call to respect free-tier quota); the watchlist result is
+  the canonical cached snapshot served for an unparameterized request.

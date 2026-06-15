@@ -14,10 +14,19 @@
  * source credential, never exposed as a model-visible param.
  */
 
+import type { ObservationInput } from "../storage/types";
 import type { DataSource, SourceResult } from "./types";
 
 /** Grams in one troy ounce (the unit XAU is quoted in). */
 const TROY_OUNCE_GRAMS = 31.1034768;
+
+/** Shape of the single entry in a gold `SourceResult.items` (see fetch()). */
+interface GoldItem {
+	xauUsdPerOz: number | null;
+	usdPerGram: number | null;
+	cnyPerGram: number | null;
+	percentChange: number | null;
+}
 
 interface TdQuote {
 	price?: string;
@@ -61,6 +70,33 @@ export const gold: DataSource = {
 			required: false,
 		},
 	],
+
+	// Spot gold trades nearly around the clock, so persist a per-unit price
+	// time-series (oz / gram USD / gram CNY) for trend + overnight analysis.
+	persist: {
+		shape: "observations",
+		retention: { rawTtlDays: 90 },
+		toObservations(result: SourceResult): ObservationInput[] {
+			const it = (result.items as GoldItem[])[0];
+			if (!it) return [];
+			const ts = result.fetchedAt;
+			const obs: ObservationInput[] = [];
+			if (typeof it.xauUsdPerOz === "number")
+				obs.push({ source: "gold", seriesKey: "XAU.usd_per_oz", ts, value: it.xauUsdPerOz, dims: { pct: it.percentChange } });
+			if (typeof it.usdPerGram === "number")
+				obs.push({ source: "gold", seriesKey: "XAU.usd_per_gram", ts, value: it.usdPerGram });
+			if (typeof it.cnyPerGram === "number")
+				obs.push({ source: "gold", seriesKey: "XAU.cny_per_gram", ts, value: it.cnyPerGram });
+			return obs;
+		},
+	},
+
+	// Hourly around the clock (NOT market-hours gated) — gold trades ~24h on
+	// weekdays, so an hourly poll captures the overnight session too.
+	schedule: {
+		cadence: "hourly",
+		refreshParams: () => [{}],
+	},
 
 	async fetch(params, env): Promise<SourceResult> {
 		const key = (env as { TWELVE_DATA_KEY?: string } | undefined)?.TWELVE_DATA_KEY;

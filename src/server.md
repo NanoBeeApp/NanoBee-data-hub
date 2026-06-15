@@ -28,3 +28,10 @@ the TanStack Start default handler.
 ### 2026-06-12 — dispatch /mcp; doc rewritten in English
 - **Motivation**: the hub now exposes a standard MCP server endpoint, and
   public-repo docs must be English.
+
+### 2026-06-15 — scheduled() Cron Trigger entry
+- **Motivation**: the hub must auto-refresh data on a schedule.
+- **Goal**: export `scheduled(event, env, ctx)` that runs `runScheduled(env)` via
+  `ctx.waitUntil`, driven by `wrangler.json` `triggers.crons` (every 5 min).
+- **Key decision**: keep the entry thin — all refresh logic lives in
+  `worker/scheduler/`.

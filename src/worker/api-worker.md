@@ -61,3 +61,10 @@ curl -X POST http://localhost:5173/api/hello -H "Content-Type: application/json"
 ✅ Base architecture complete
 ✅ Example endpoints implemented
 ⏳ Pending: integration into the frontend page
+
+## Change history
+
+### 2026-06-15 — storage bindings on Env
+- **Motivation**: the storage layer needs the D1 (and optional R2) bindings.
+- **Goal**: add `DB?` and `BLOBS?` to the `Env` type (typed `unknown`, resolved
+  by `storage/getStore`) alongside the existing `TWELVE_DATA_KEY`.
