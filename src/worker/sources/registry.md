@@ -41,3 +41,11 @@ HTTP layers. Adding a source = import it and append to `SOURCES`.
   `schedule`.
 - **Goal**: register `stocks` + `econCalendar` in `SOURCES`; export
   `listScheduledSources()` returning sources with a `schedule`.
+
+### 2026-06-15 — register Phase 2 sources (forex/crypto/treasury/news/webpage)
+- **Motivation**: extend the catalog with FX, crypto, US Treasury rates, market
+  news, and on-demand web-page content.
+- **Goal**: import and append `forex`, `crypto`, `treasury`, `news`, `webpage`
+  to `SOURCES`.
+- **Key decision**: the crypto module exports `cryptoPrices` (imported here as
+  `crypto`) to avoid shadowing the global `globalThis.crypto` (WebCrypto).

@@ -13,8 +13,10 @@ import { sourceRoutes } from './routes/sources';
 
 // Define the Worker environment type
 export type Env = {
-  /** Twelve Data API key used by the gold/stocks sources (project-level credential). */
+  /** Twelve Data API key used by the gold/stocks/forex sources (project-level credential). */
   TWELVE_DATA_KEY?: string;
+  /** Finnhub API key used by the news source (project-level credential). */
+  FINNHUB_KEY?: string;
   /** D1 database for the storage layer (records / observations / source_state). */
   DB?: unknown;
   /** R2 bucket for large blobs (web-page content); optional. */

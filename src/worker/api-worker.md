@@ -68,3 +68,9 @@ curl -X POST http://localhost:5173/api/hello -H "Content-Type: application/json"
 - **Motivation**: the storage layer needs the D1 (and optional R2) bindings.
 - **Goal**: add `DB?` and `BLOBS?` to the `Env` type (typed `unknown`, resolved
   by `storage/getStore`) alongside the existing `TWELVE_DATA_KEY`.
+
+### 2026-06-15 — FINNHUB_KEY on Env (Phase 2 news source)
+- **Motivation**: the new `news` source needs a Finnhub credential.
+- **Goal**: add `FINNHUB_KEY?: string` to `Env` (read server-side, injected via
+  the gitignored `.dev.vars`; passed to Finnhub as the `X-Finnhub-Token` header,
+  never in the URL).

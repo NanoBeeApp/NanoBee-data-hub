@@ -10,14 +10,19 @@
  * to `SOURCES` below — nothing else changes.
  */
 
+import { cryptoPrices as crypto } from "./crypto";
 import { econCalendar } from "./econ-calendar";
+import { forex } from "./forex";
 import { gold } from "./gold";
 import { hackerNews } from "./hackernews";
+import { news } from "./news";
 import { stocks } from "./stocks";
+import { treasury } from "./treasury";
 import { webSearch } from "./websearch";
+import { webpage } from "./webpage";
 import type { DataSource, SourceDescriptor, SourceParam } from "./types";
 
-const SOURCES: DataSource[] = [hackerNews, webSearch, gold, stocks, econCalendar];
+const SOURCES: DataSource[] = [hackerNews, webSearch, gold, stocks, econCalendar, forex, crypto, treasury, news, webpage];
 
 const BY_ID = new Map(SOURCES.map((s) => [s.id, s]));
 
