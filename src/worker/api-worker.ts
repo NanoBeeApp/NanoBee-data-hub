@@ -15,6 +15,8 @@ import { sourceRoutes } from './routes/sources';
 export type Env = {
   // Add Cloudflare Workers bindings here
   // e.g.: MY_KV: KVNamespace;
+  /** Twelve Data API key used by the gold source (project-level source credential). */
+  TWELVE_DATA_KEY?: string;
 };
 
 // Create the Hono app instance

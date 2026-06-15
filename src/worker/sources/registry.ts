@@ -10,11 +10,12 @@
  * to `SOURCES` below — nothing else changes.
  */
 
+import { gold } from "./gold";
 import { hackerNews } from "./hackernews";
 import { webSearch } from "./websearch";
 import type { DataSource, SourceDescriptor, SourceParam } from "./types";
 
-const SOURCES: DataSource[] = [hackerNews, webSearch];
+const SOURCES: DataSource[] = [hackerNews, webSearch, gold];
 
 const BY_ID = new Map(SOURCES.map((s) => [s.id, s]));
 

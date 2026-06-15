@@ -191,6 +191,8 @@ dist
 
 ### Wrangler ###
 .wrangler/
+# Local wrangler secrets (e.g. TWELVE_DATA_KEY) — provided via `wrangler secret` on deploy
+.dev.vars
 __pycache__/
 *.gen.ts
 
